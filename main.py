@@ -44,7 +44,7 @@ while running:
     
     # Draw the sprites
     all_sprites.draw(screen)
-    
+
     # Update the screen
     pygame.display.flip()
 
