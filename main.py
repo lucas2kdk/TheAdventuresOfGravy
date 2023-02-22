@@ -24,6 +24,12 @@ player = Player(WINDOW_SIZE)
 enemy = Enemy(WINDOW_SIZE)
 all_sprites = pygame.sprite.Group(player, enemy)
 
+# Set up the clock to limit the game to 60 fps
+clock = pygame.time.Clock()
+
+# Set up the font to display the FPS counter
+font = pygame.font.Font(None, 36)
+
 # Exit function
 def exitfn(keys):
     if keys[pygame.K_ESCAPE]:
@@ -33,6 +39,9 @@ def exitfn(keys):
 # Main game loop
 running = True
 while running:
+    # Limit the game to 60 fps
+    clock.tick(60)
+
     # Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -51,6 +60,10 @@ while running:
 
     # Run exitfn function
     exitfn(keys)
+
+    # Draw the FPS counter in the top left corner of the screen
+    fps_text = font.render("FPS: {:.2f}".format(clock.get_fps()), True, (0, 0, 0))
+    screen.blit(fps_text, (10, 10))
 
     # Update the screen
     pygame.display.flip()
