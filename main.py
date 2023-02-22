@@ -10,7 +10,7 @@ WINDOW_SIZE = (1280, 720)
 screen = pygame.display.set_mode(WINDOW_SIZE)
 
 # Set the window title
-pygame.display.set_caption("Blank White Canvas")
+pygame.display.set_caption("The Adventures of Young Gravy")
 
 # Set the background color to white
 background_color = (255, 255, 255)
