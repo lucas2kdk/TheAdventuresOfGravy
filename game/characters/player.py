@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
 
         # Set player properties
         self.health = 100
-        self.speed = 1
+        self.speed = 6
 
         # Load and scale player image
         self.image = pygame.image.load(os.path.join('game', 'sprites', 'player.png')).convert_alpha()
