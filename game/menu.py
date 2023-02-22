@@ -23,26 +23,14 @@ def create_button(rect, color, text, text_color):
     return button
 
 # Set up the buttons
-button_rects = [
-    pygame.Rect(200, 100, 200, 100),
-    pygame.Rect(200, 300, 200, 100),
+buttons = [
+    {"id": 1, "rect": pygame.Rect(200, 100, 200, 100), "color": (255, 255, 255), "text": "start", "text_color": (0, 0, 0)},
+    {"id": 2, "rect": pygame.Rect(200, 300, 200, 100), "color": (255, 0, 0), "text": "Exit", "text_color": (255, 255, 255)},
 ]
-button_colors = [
-    (255, 255, 255),
-    (255, 0, 0),
-]
-button_texts = [
-    "start",
-    "exit",
-]
-button_text_colors = [
-    (0, 0, 0),
-    (255, 255, 255),
-]
-buttons = []
-for i in range(len(button_rects)):
-    button = create_button(button_rects[i], button_colors[i], button_texts[i], button_text_colors[i])
-    buttons.append(button)
+button_surfaces = []
+for button in buttons:
+    button_surface = create_button(button["rect"], button["color"], button["text"], button["text_color"])
+    button_surfaces.append(button_surface)
 
 while True:
     # Handle events
@@ -53,14 +41,17 @@ while True:
             quit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             # Check if the mouse button was pressed over any of the buttons
-            for i in range(len(buttons)):
-                if button_rects[i].collidepoint(event.pos):
-                    print("Button", i+1, "clicked!")
-                
+            for button in buttons:
+                if button["rect"].collidepoint(event.pos) and button["id"] == 1:
+                    print("run game!")
+                elif button["rect"].collidepoint(event.pos) and button["id"] == 2:
+                    pygame.quit()
+                    quit()
+
     # Fill the screen with black
     screen.fill((0, 0, 0))
     # Draw the buttons to the screen
-    for i in range(len(buttons)):
-        screen.blit(buttons[i], button_rects[i])
+    for i, button_surface in enumerate(button_surfaces):
+        screen.blit(button_surface, buttons[i]["rect"])
     # Update the display
     pygame.display.update()
