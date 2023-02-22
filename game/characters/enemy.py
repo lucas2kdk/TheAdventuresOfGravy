@@ -10,7 +10,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
         # Set enemy properties
-        self.speed = 0.3
+        self.speed = 2
         self.position = pygame.math.Vector2(screen_size[0] / 2, screen_size[1] / 2)
 
         # Scale enemy to 4% of screen size
