@@ -2,6 +2,7 @@ import os
 import pygame
 from game.characters.player import Player
 from game.characters.enemy import Enemy
+#from pygame.locals import *
 
 # Initialize Pygame
 pygame.init()
@@ -23,6 +24,12 @@ player = Player(WINDOW_SIZE)
 enemy = Enemy(WINDOW_SIZE)
 all_sprites = pygame.sprite.Group(player, enemy)
 
+# Exit function
+def exitfn(keys):
+    if keys[pygame.K_ESCAPE]:
+        pygame.quit()
+        quit()
+
 # Main game loop
 running = True
 while running:
@@ -41,6 +48,9 @@ while running:
     keys = pygame.key.get_pressed()
     player.update(keys)
     enemy.update(player.position)
+
+    # Run exitfn function
+    exitfn(keys)
 
     # Update the screen
     pygame.display.flip()
