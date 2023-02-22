@@ -1,27 +1,33 @@
-# lav en skærm (1200X600)
-
 import pygame
-from sys import exit
-import math
+
+# Initialize Pygame
 pygame.init()
 
-size = width, height = 1200, 600
+# Set the window size
+WINDOW_SIZE = (1280, 720)
 
-origin = width/2, 0
+# Set up the window
+screen = pygame.display.set_mode(WINDOW_SIZE)
 
-white = 255, 255, 255
-black = 0,0,0
+# Set the window title
+pygame.display.set_caption("Blank White Canvas")
 
-screen = pygame.display.set_mode(size)
+# Set the background color to white
+background_color = (255, 255, 255)
 
+# Main game loop
 running = True
 while running:
+    # Handle events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
-    screen.fill(black)
+    
+    # Fill the screen with the background color
+    screen.fill(background_color)
+    
+    # Update the screen
     pygame.display.flip()
 
+# Quit Pygame
 pygame.quit()
-quit()
