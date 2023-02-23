@@ -12,26 +12,35 @@ screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
 # Set up the font
 font = pygame.font.SysFont(None, 48)
 
-def create_button(rect, color, text, text_color):
+def create_button(position, size, color, text, text_color):
     # Create a new surface for the button
-    button = pygame.Surface(rect.size)
+    button = pygame.Surface(size)
     # Fill the button with the specified color
     button.fill(color)
     # Render the button text and center it on the button surface
     text_surf = font.render(text, True, text_color)
     text_rect = text_surf.get_rect(center=button.get_rect().center)
     button.blit(text_surf, text_rect)
-    # Return the button surface
-    return button
+    # Position the button at the specified position
+    button_rect = button.get_rect(center=position)
+    # Return the button surface and rect
+    return button, button_rect
 
 # Set up the buttons
+button_size = (200, 100)
+button_y = screen.get_height() // 2 - button_size[1] // 2
+button_positions = [
+    (screen.get_width() // 4, button_y),
+    (screen.get_width() * 3 // 4, button_y),
+]
 buttons = [
-    {"id": 1, "rect": pygame.Rect(200, 100, 200, 100), "color": (255, 255, 255), "text": "start", "text_color": (0, 0, 0)},
-    {"id": 2, "rect": pygame.Rect(200, 300, 200, 100), "color": (255, 0, 0), "text": "Exit", "text_color": (255, 255, 255)},
+    {"id": 1, "color": (255, 255, 255), "text": "start", "text_color": (0, 0, 0)},
+    {"id": 2, "color": (255, 0, 0), "text": "Exit", "text_color": (255, 255, 255)},
 ]
 button_surfaces = []
-for button in buttons:
-    button_surface = create_button(button["rect"], button["color"], button["text"], button["text_color"])
+for i, button in enumerate(buttons):
+    button_surface, button_rect = create_button(button_positions[i], button_size, button["color"], button["text"], button["text_color"])
+    button["rect"] = button_rect
     button_surfaces.append(button_surface)
 
 while True:
@@ -46,7 +55,6 @@ while True:
             for button in buttons:
                 if button["rect"].collidepoint(event.pos) and button["id"] == 1:
                     play(Player, Enemy)
-                    
                 elif button["rect"].collidepoint(event.pos) and button["id"] == 2:
                     pygame.quit()
                     quit()
