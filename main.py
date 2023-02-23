@@ -2,7 +2,7 @@ import os
 import pygame
 from game.characters.player import Player
 from game.characters.enemy import Enemy
-#from pygame.locals import *
+from pygame.locals import *
 
 # make a main function
 def play(Player, Enemy):
@@ -19,6 +19,10 @@ def play(Player, Enemy):
     # Set the window title
     pygame.display.set_caption("The Adventures of Young Gravy")
 
+    # Load the background image
+    background_image = pygame.image.load(os.path.join('game', 'baggrunde', 'Kirkegaard.png')).convert()
+    background_image = pygame.transform.scale(background_image, WINDOW_SIZE)
+
     # Set the background color to white
     background_color = (255, 255, 255)
 
@@ -27,6 +31,7 @@ def play(Player, Enemy):
     enemy = Enemy(WINDOW_SIZE)
     all_sprites = pygame.sprite.Group(player, enemy)
 
+
     # Exit function
     def exitfn(keys):
         if keys[pygame.K_ESCAPE]:
@@ -34,12 +39,16 @@ def play(Player, Enemy):
             quit()
 
     # Main game loop
+    clock = pygame.time.Clock()
     running = True
     while running:
         # Handle events
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == QUIT:
                 running = False
+
+        # Blit the background image onto the screen
+        screen.blit(background_image, (0, 0))
 
         # Fill the screen with the background color
         screen.fill(background_color)
@@ -55,8 +64,14 @@ def play(Player, Enemy):
         # Run exitfn function
         exitfn(keys)
 
+
         # Update the screen
         pygame.display.flip()
 
+    # Limit the frame rate to 60 fps
+    clock.tick(60)
+        
     # Quit Pygame
     pygame.quit()
+    QUIT()
+

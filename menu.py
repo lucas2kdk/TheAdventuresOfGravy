@@ -46,8 +46,8 @@ while True:
             # Check if the mouse button was pressed over any of the buttons
             for button in buttons:
                 if button["rect"].collidepoint(event.pos) and button["id"] == 1:
-                    print("run game!")
                     play(Player, Enemy)
+                    
                 elif button["rect"].collidepoint(event.pos) and button["id"] == 2:
                     pygame.quit()
                     quit()
