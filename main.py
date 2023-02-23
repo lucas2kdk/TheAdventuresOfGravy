@@ -4,56 +4,59 @@ from game.characters.player import Player
 from game.characters.enemy import Enemy
 #from pygame.locals import *
 
-# Initialize Pygame
-pygame.init()
+# make a main function
+def play(Player, Enemy):
 
-# Set the window size
-WINDOW_SIZE = (1280, 720)
+    # Initialize Pygame
+    pygame.init()
 
-# Set up the window
-screen = pygame.display.set_mode(WINDOW_SIZE)
+    # Set the window size
+    WINDOW_SIZE = (1280, 720)
 
-# Set the window title
-pygame.display.set_caption("The Adventures of Young Gravy")
+    # Set up the window
+    screen = pygame.display.set_mode(WINDOW_SIZE, pygame.FULLSCREEN)
 
-# Set the background color to white
-background_color = (255, 255, 255)
+    # Set the window title
+    pygame.display.set_caption("The Adventures of Young Gravy")
 
-# Create the player and enemy objects and the sprite group
-player = Player(WINDOW_SIZE)
-enemy = Enemy(WINDOW_SIZE)
-all_sprites = pygame.sprite.Group(player, enemy)
+    # Set the background color to white
+    background_color = (255, 255, 255)
 
-# Exit function
-def exitfn(keys):
-    if keys[pygame.K_ESCAPE]:
-        pygame.quit()
-        quit()
+    # Create the player and enemy objects and the sprite group
+    player = Player(WINDOW_SIZE)
+    enemy = Enemy(WINDOW_SIZE)
+    all_sprites = pygame.sprite.Group(player, enemy)
 
-# Main game loop
-running = True
-while running:
-    # Handle events
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+    # Exit function
+    def exitfn(keys):
+        if keys[pygame.K_ESCAPE]:
+            pygame.quit()
+            quit()
 
-    # Fill the screen with the background color
-    screen.fill(background_color)
+    # Main game loop
+    running = True
+    while running:
+        # Handle events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
 
-    # Draw the sprites
-    all_sprites.draw(screen)
+        # Fill the screen with the background color
+        screen.fill(background_color)
 
-    # Update the player and enemy
-    keys = pygame.key.get_pressed()
-    player.update(keys)
-    enemy.update(player.position)
+        # Draw the sprites
+        all_sprites.draw(screen)
 
-    # Run exitfn function
-    exitfn(keys)
+        # Update the player and enemy
+        keys = pygame.key.get_pressed()
+        player.update(keys)
+        enemy.update(player.position)
 
-    # Update the screen
-    pygame.display.flip()
+        # Run exitfn function
+        exitfn(keys)
 
-# Quit Pygame
-pygame.quit()
+        # Update the screen
+        pygame.display.flip()
+
+    # Quit Pygame
+    pygame.quit()

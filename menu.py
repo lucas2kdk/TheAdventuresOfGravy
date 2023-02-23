@@ -1,4 +1,7 @@
 import pygame
+from main import play
+from game.characters.player import Player
+from game.characters.enemy import Enemy
 
 # Initialize Pygame
 pygame.init()
@@ -44,6 +47,7 @@ while True:
             for button in buttons:
                 if button["rect"].collidepoint(event.pos) and button["id"] == 1:
                     print("run game!")
+                    play(Player, Enemy)
                 elif button["rect"].collidepoint(event.pos) and button["id"] == 2:
                     pygame.quit()
                     quit()
