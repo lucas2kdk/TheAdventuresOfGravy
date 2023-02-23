@@ -7,8 +7,7 @@ from game.characters.enemy import Enemy
 pygame.init()
 
 # Set up the window
-size = (640, 480)
-screen = pygame.display.set_mode(size)
+screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
 
 # Set up the font
 font = pygame.font.SysFont(None, 48)
