@@ -23,9 +23,6 @@ def play(Player, Enemy):
     background_image = pygame.image.load(os.path.join('game', 'baggrunde', 'Kirkegaard.png')).convert()
     background_image = pygame.transform.scale(background_image, WINDOW_SIZE)
 
-    # Set the background color to white
-    background_color = (255, 255, 255)
-
     # Create the player and enemy objects and the sprite group
     player = Player(WINDOW_SIZE)
     enemy = Enemy(WINDOW_SIZE)
@@ -49,9 +46,6 @@ def play(Player, Enemy):
 
         # Blit the background image onto the screen
         screen.blit(background_image, (0, 0))
-
-        # Fill the screen with the background color
-        screen.fill(background_color)
 
         # Draw the sprites
         all_sprites.draw(screen)

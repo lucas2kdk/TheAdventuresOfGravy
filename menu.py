@@ -1,4 +1,5 @@
 import pygame
+import os
 from main import play
 from game.characters.player import Player
 from game.characters.enemy import Enemy
@@ -8,6 +9,11 @@ pygame.init()
 
 # Set up the window
 screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
+
+# Set background
+background_image = pygame.image.load(os.path.join('game', 'baggrunde', 'Bo.png')).convert()
+picture = pygame.transform.scale(background_image, (1280, 720))
+screen.blit(picture, (0, 0))
 
 # Set up the font
 font = pygame.font.SysFont(None, 48)
@@ -45,6 +51,7 @@ for i, button in enumerate(buttons):
 
 while True:
     # Handle events
+    clock = pygame.time.Clock()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             # Quit Pygame and exit the program
@@ -59,8 +66,10 @@ while True:
                     pygame.quit()
                     quit()
 
+    clock.tick(5)
+
     # Fill the screen with black
-    screen.fill((0, 0, 0))
+    #screen.fill((0, 0, 0))
     # Draw the buttons to the screen
     for i, button_surface in enumerate(button_surfaces):
         screen.blit(button_surface, buttons[i]["rect"])
