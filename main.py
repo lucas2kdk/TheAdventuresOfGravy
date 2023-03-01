@@ -10,22 +10,20 @@ def play(Player, Enemy):
     # Initialize Pygame
     pygame.init()
 
-    # Set the window size
-    WINDOW_SIZE = (1280, 720)
-
     # Set up the window
-    screen = pygame.display.set_mode(WINDOW_SIZE, pygame.FULLSCREEN)
+    info = pygame.display.Info()
+    screen = pygame.display.set_mode((info.current_w, info.current_h), pygame.FULLSCREEN)
 
     # Set the window title
     pygame.display.set_caption("The Adventures of Young Gravy")
 
     # Load the background image
     background_image = pygame.image.load(os.path.join('game', 'baggrunde', 'Kirkegaard.png')).convert()
-    background_image = pygame.transform.scale(background_image, WINDOW_SIZE)
+    background_image = pygame.transform.scale(background_image, (screen.get_width(), screen.get_height()))
 
     # Create the player and enemy objects and the sprite group
-    player = Player(WINDOW_SIZE)
-    enemy = Enemy(WINDOW_SIZE)
+    player = Player((screen.get_width(), screen.get_height()))
+    enemy = Enemy((screen.get_width(), screen.get_height()))
     all_sprites = pygame.sprite.Group(player, enemy)
 
 
@@ -62,10 +60,9 @@ def play(Player, Enemy):
         # Update the screen
         pygame.display.flip()
 
-    # Limit the frame rate to 60 fps
-    clock.tick(60)
+        # Limit the frame rate to 60 fps
+        clock.tick(60)
         
     # Quit Pygame
     pygame.quit()
-    QUIT()
-
+    quit()

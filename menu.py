@@ -8,15 +8,16 @@ from game.characters.enemy import Enemy
 pygame.init()
 
 # Set up the window
-screen = pygame.display.set_mode((1920, 1080), pygame.FULLSCREEN)
+info = pygame.display.Info()
+screen = pygame.display.set_mode((info.current_w, info.current_h), pygame.FULLSCREEN)
 
 # Set background
 background_image = pygame.image.load(os.path.join('game', 'baggrunde', 'Bo.png')).convert()
-picture = pygame.transform.scale(background_image, (1280, 720))
+picture = pygame.transform.scale(background_image, (screen.get_width(), screen.get_height()))
 screen.blit(picture, (0, 0))
 
 # Set up the font
-font = pygame.font.SysFont(None, 48)
+font = pygame.font.SysFont(None, int(screen.get_height() * 0.045))
 
 def create_button(position, size, color, text, text_color):
     # Create a new surface for the button
@@ -33,11 +34,11 @@ def create_button(position, size, color, text, text_color):
     return button, button_rect
 
 # Set up the buttons
-button_size = (200, 100)
+button_size = (int(screen.get_width() * 0.104), int(screen.get_height() * 0.093))
 button_y = screen.get_height() // 2 - button_size[1] // 2
 button_positions = [
-    (screen.get_width() // 4, button_y),
-    (screen.get_width() * 3 // 4, button_y),
+    (int(screen.get_width() * 0.26), button_y),
+    (int(screen.get_width() * 0.74), button_y),
 ]
 buttons = [
     {"id": 1, "color": (255, 255, 255), "text": "start", "text_color": (0, 0, 0)},
