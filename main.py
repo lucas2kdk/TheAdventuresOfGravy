@@ -4,61 +4,74 @@ from game.characters.player import Player
 from game.characters.enemy import Enemy
 from pygame.locals import *
 
-# Initialize Pygame
-pygame.init()
+# make a main function
+def play(Player, Enemy):
 
-# Set the window size
-WINDOW_SIZE = (1280, 720)
+    # Initialize Pygame
+    pygame.init()
 
-# Set up the window
-screen = pygame.display.set_mode(WINDOW_SIZE)
+    # Set the window size
+    WINDOW_SIZE = (1280, 720)
 
-# Set the window title
-pygame.display.set_caption("The Adventures of Young Gravy")
+    # Set up the window
+    screen = pygame.display.set_mode(WINDOW_SIZE, pygame.FULLSCREEN)
 
-# Load the background image
-background_image = pygame.image.load(os.path.join('game', 'baggrunde', 'Kirkegaard.png')).convert()
-background_image = pygame.transform.scale(background_image, WINDOW_SIZE)
+    # Set the window title
+    pygame.display.set_caption("The Adventures of Young Gravy")
 
-# Create the player and enemy objects and the sprite group
-player = Player(WINDOW_SIZE)
-enemy = Enemy(WINDOW_SIZE)
-all_sprites = pygame.sprite.Group(player, enemy)
+    # Load the background image
+    background_image = pygame.image.load(os.path.join('game', 'baggrunde', 'Kirkegaard.png')).convert()
+    background_image = pygame.transform.scale(background_image, WINDOW_SIZE)
 
-# Exit function
-def exitfn(keys):
-    if keys[pygame.K_ESCAPE]:
-        pygame.quit()
-        quit()
+    # Set the background color to white
+    background_color = (255, 255, 255)
 
-# Main game loop
-clock = pygame.time.Clock()
-running = True
-while running:
-    # Handle events
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            running = False
+    # Create the player and enemy objects and the sprite group
+    player = Player(WINDOW_SIZE)
+    enemy = Enemy(WINDOW_SIZE)
+    all_sprites = pygame.sprite.Group(player, enemy)
 
-    # Blit the background image onto the screen
-    screen.blit(background_image, (0, 0))
 
-    # Draw the sprites
-    all_sprites.draw(screen)
+    # Exit function
+    def exitfn(keys):
+        if keys[pygame.K_ESCAPE]:
+            pygame.quit()
+            quit()
 
-    # Update the player and enemy
-    keys = pygame.key.get_pressed()
-    player.update(keys)
-    enemy.update(player.position)
+    # Main game loop
+    clock = pygame.time.Clock()
+    running = True
+    while running:
+        # Handle events
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                running = False
 
-    # Run exitfn function
-    exitfn(keys)
+        # Blit the background image onto the screen
+        screen.blit(background_image, (0, 0))
 
-    # Update the screen
-    pygame.display.flip()
+        # Fill the screen with the background color
+        screen.fill(background_color)
+
+        # Draw the sprites
+        all_sprites.draw(screen)
+
+        # Update the player and enemy
+        keys = pygame.key.get_pressed()
+        player.update(keys)
+        enemy.update(player.position)
+
+        # Run exitfn function
+        exitfn(keys)
+
+
+        # Update the screen
+        pygame.display.flip()
 
     # Limit the frame rate to 60 fps
     clock.tick(60)
+        
+    # Quit Pygame
+    pygame.quit()
+    QUIT()
 
-# Quit Pygame
-pygame.quit()
