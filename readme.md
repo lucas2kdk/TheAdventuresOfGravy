@@ -10,6 +10,7 @@ Welcome to "The Adventures of Gravy"! This is a fun, action-packed game where yo
 - August
 - Aksel
 - Christian
+- Freja
 - Gravy
 - Lucas
 - Ruben
