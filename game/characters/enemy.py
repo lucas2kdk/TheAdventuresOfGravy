@@ -1,13 +1,10 @@
 import pygame
 import os
+from game.characters import spritsheet
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, screen_size):
         super().__init__()
-
-        # Load and scale enemy image
-        self.image = pygame.image.load(os.path.join('game', 'sprites', 'enemy.jpg')).convert_alpha()
-        self.rect = self.image.get_rect()
 
         # Set enemy properties
         self.speed = 0.8
@@ -25,3 +22,24 @@ class Enemy(pygame.sprite.Sprite):
             direction.scale_to_length(self.speed)
         self.position += direction
         self.rect.center = self.position
+
+        sprite_sheet_image = pygame.image.load('game', 'sprites', 'ghost', 'ghost.png').convert_alpha()
+        sprite_sheet = spritsheet.spritSheet(sprite_sheet_image)
+
+        black = (0, 0, 0)
+
+        frame_list = []
+        animation_steps = 11
+
+        for x in range(animation_steps):
+            frame_list.append(sprite_sheet.get_img(x, 60, 60, 1.4, black))
+
+        update = pygame.time.get_ticks()
+        animation_cooldown = 500 
+        frame = 0
+
+        current_time = pygame.time.get_ticks()
+        if current_time - update >= animation_cooldown:
+            frame += 1
+            if frame >= len(frame_list):
+                frame = 0

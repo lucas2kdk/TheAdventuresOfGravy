@@ -3,6 +3,7 @@ import pygame
 from game.characters.player import Player
 from game.characters.enemy import Enemy
 from pygame.locals import *
+from game.characters.enemy import *
 
 # make a main function
 def play(Player, Enemy):
@@ -47,6 +48,7 @@ def play(Player, Enemy):
 
         # Draw the sprites
         all_sprites.draw(screen)
+        screen.blit(frame_list[frame], (0, 0))
 
         # Update the player and enemy
         keys = pygame.key.get_pressed()
