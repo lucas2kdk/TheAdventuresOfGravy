@@ -19,7 +19,7 @@ screen.blit(picture, (0, 0))
 # Set up the font
 font = pygame.font.SysFont(None, int(screen.get_height() * 0.045))
 
-def create_button(position, size, color, text, text_color):
+def create_button(position, size, color, text, text_color,type):
     # Create a new surface for the button
     button = pygame.Surface(size)
     # Fill the button with the specified color
@@ -28,16 +28,27 @@ def create_button(position, size, color, text, text_color):
     text_surf = font.render(text, True, text_color)
     text_rect = text_surf.get_rect(center=button.get_rect().center)
     textsurf = str(text_surf)
-    for i in textsurf:
-        print(i)
-        if i == "7":
-            charImage = pygame.image.load(os.path.join('game', 'sprites', 'knap.png'))
-            #charImage = pygame.transform.scale(charImage, (57, 26))
-            charImage = pygame.transform.scale(charImage, (70, 40))
-            charImage = charImage.convert()
-            print(button.get_rect())
-            print(type(button.get_rect()))
-            button.blit(charImage, button.get_rect())
+    #print("TEXTSURF:"+textsurf)
+    #print("TEXTSURF END")
+    #print("p: " + str(position))
+    #for i in position:
+        #print("F"+i)x
+    if type == "PLAY":
+        charImage = pygame.image.load(os.path.join('game', 'sprites', 'knap.png'))
+        #charImage = pygame.transform.scale(charImage, (57, 26))
+        charImage = pygame.transform.scale(charImage, (160, 80))
+        charImage = charImage.convert()
+        #print(button.get_view())
+        #print(type(button.get_rect()))
+        button.blit(charImage, button.get_rect())
+    elif type == "EXIT":
+        charImage = pygame.image.load(os.path.join('game', 'sprites', 'Exit Knap.png'))
+        #charImage = pygame.transform.scale(charImage, (57, 26))
+        charImage = pygame.transform.scale(charImage, (160, 80))
+        charImage = charImage.convert()
+        #print(button.get_view())
+        #print(type(button.get_rect()))
+        button.blit(charImage, button.get_rect())
     #if text_surf == <Surface(57x26x32 SW)>:
     #print(text_rect)
     #print(type(text_rect))
@@ -57,12 +68,12 @@ button_positions = [
     (int(screen.get_width() * 0.74), button_y),
 ]
 buttons = [
-    {"id": 1, "color": (255, 255, 255), "text": "star0t", "text_color": (0, 0, 0)},
-    {"id": 2, "color": (255, 0, 0), "text": "Exit", "text_color": (255, 255, 255)},
+    {"id": 1, "color": (255, 255, 255), "text": "star0t", "text_color": (0, 0, 0),"type":"PLAY"},
+    {"id": 2, "color": (255, 0, 0), "text": "Exit", "text_color": (255, 255, 255),"type":"EXIT"},
 ]
 button_surfaces = []
 for i, button in enumerate(buttons):
-    button_surface, button_rect = create_button(button_positions[i], button_size, button["color"], button["text"], button["text_color"])
+    button_surface, button_rect = create_button(button_positions[i], button_size, button["color"], "", button["text_color"],button["type"]) #button["text"]
     button["rect"] = button_rect
     button_surfaces.append(button_surface)
 
