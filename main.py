@@ -47,8 +47,8 @@ def play(Player, Enemy):
         screen.blit(background_image, (0, 0))
 
         # Draw the sprites
-        all_sprites.draw(screen)
-        screen.blit(frame_list[frame], (0, 0))
+        screen.blit(player.image, (300, 300))
+        screen.blit(enemy.frame_list[enemy.frame], (0, 0))
 
         # Update the player and enemy
         keys = pygame.key.get_pressed()

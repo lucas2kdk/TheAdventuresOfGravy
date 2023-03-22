@@ -57,7 +57,7 @@ button_positions = [
     (int(screen.get_width() * 0.74), button_y),
 ]
 buttons = [
-    {"id": 1, "color": (255, 255, 255), "text": "star0t", "text_color": (0, 0, 0)},
+    {"id": 1, "color": (255, 255, 255), "text": "start", "text_color": (0, 0, 0)},
     {"id": 2, "color": (255, 0, 0), "text": "Exit", "text_color": (255, 255, 255)},
 ]
 button_surfaces = []
