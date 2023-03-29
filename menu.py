@@ -9,7 +9,7 @@ import playsound
 # Initialize Pygame
 pygame.init()
 
-t = Thread(target=playsound.playsound, args=["theme.wav"])
+t = Thread(target=playsound.playsound, args=["main theme.mp3"])
 
 t.start()
 
