@@ -55,7 +55,9 @@ def play(Player, Enemy):
         all_sprites.draw(screen)
         screen.blit(enemy.frame_list[enemy.current_frame], (0, 0))
 
-        
+        # Damage the player
+        player_right = player.get_bottom_right
+        print(player_right_bottom)
 
         # Run exitfn function
         exitfn(keys)

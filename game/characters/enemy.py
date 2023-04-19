@@ -13,7 +13,7 @@ class Enemy(pygame.sprite.Sprite):
         # Create image and scale enemy to 4% of screen size
         self.image = pygame.Surface((60, 60))
         self.image.fill((255, 0, 0))
-        scale_factor = int(screen_size[0] * 0.04) / self.image.get_width()
+        scale_factor = int(screen_size[0] * 0.05) / self.image.get_width()
         self.image = pygame.transform.rotozoom(self.image, 0, scale_factor)
 
         # Set rect
