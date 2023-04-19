@@ -43,17 +43,19 @@ def play(Player, Enemy):
             if event.type == QUIT:
                 running = False
 
+        # Update the player and enemy
+        keys = pygame.key.get_pressed()
+        player.update(keys)
+        enemy.update(player.position)
+
         # Blit the background image onto the screen
         screen.blit(background_image, (0, 0))
 
         # Draw the sprites
         all_sprites.draw(screen)
-        screen.blit(frame_list[frame], (0, 0))
+        screen.blit(enemy.frame_list[enemy.current_frame], (0, 0))
 
-        # Update the player and enemy
-        keys = pygame.key.get_pressed()
-        player.update(keys)
-        enemy.update(player.position)
+        
 
         # Run exitfn function
         exitfn(keys)
