@@ -21,9 +21,9 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, keys):
         # Handle player movement
-        dx = keys[pygame.K_RIGHT] - keys[pygame.K_LEFT]
-        dy = keys[pygame.K_DOWN] - keys[pygame.K_UP]
-        movement_vector = pygame.math.Vector2(dx, dy)
+        Kx = keys[pygame.K_d] - keys[pygame.K_a]
+        Ky = keys[pygame.K_s] - keys[pygame.K_w]
+        movement_vector = pygame.math.Vector2(Kx, Ky)
         if movement_vector.length() > 0:
             movement_vector.normalize()
             movement_vector *= self.speed
