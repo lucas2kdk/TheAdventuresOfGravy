@@ -18,6 +18,23 @@ class Enemy(pygame.sprite.Sprite):
 
         # Set rect
         self.rect = self.image.get_rect()
+
+        # Load sprite sheet and create frame list
+        sprite_sheet_image = pygame.image.load(os.path.join('game', 'sprites', 'ghost', 'ghost.png')).convert_alpha()
+        sprite_sheet = spritsheet.spritSheet(sprite_sheet_image)
+
+        black = (0, 0, 0)
+
+        self.frame_list = []
+        animation_steps = 11
+
+        for x in range(animation_steps):
+            self.frame_list.append(sprite_sheet.get_img(x, 60, 60, 1.4, black))
+
+        self.update_time = pygame.time.get_ticks()
+        self.animation_cooldown = 500
+        self.current_frame = 0
+
     def update(self, player_position):
         # Move the enemy towards the player
         direction = player_position - self.position
@@ -26,23 +43,8 @@ class Enemy(pygame.sprite.Sprite):
         self.position += direction
         self.rect.center = self.position
 
-        sprite_sheet_image = pygame.image.load('game', 'sprites', 'ghost', 'ghost.png').convert_alpha()
-        sprite_sheet = spritsheet.spritSheet(sprite_sheet_image)
-
-        black = (0, 0, 0)
-
-        frame_list = []
-        animation_steps = 11
-
-        for x in range(animation_steps):
-            frame_list.append(sprite_sheet.get_img(x, 60, 60, 1.4, black))
-
-        update = pygame.time.get_ticks()
-        animation_cooldown = 500 
-        frame = 0
-
+        # Update the enemy's animation frame
         current_time = pygame.time.get_ticks()
-        if current_time - update >= animation_cooldown:
-            frame += 1
-            if frame >= len(frame_list):
-                frame = 0
+        if current_time - self.update_time >= self.animation_cooldown:
+            self.current_frame = (self.current_frame + 1) % len(self.frame_list)
+            self.update_time = current_time
