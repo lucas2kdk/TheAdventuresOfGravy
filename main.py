@@ -4,6 +4,9 @@ from game.characters.player import Player
 from game.characters.enemy import Enemy
 from pygame.locals import *
 from game.characters.enemy import *
+from time import sleep
+import threading
+#from sys import exit
 
 # make a main function
 def play(Player, Enemy):
@@ -26,6 +29,7 @@ def play(Player, Enemy):
     player = Player((screen.get_width(), screen.get_height()))
     enemy = Enemy((screen.get_width(), screen.get_height()))
     all_sprites = pygame.sprite.Group(player, enemy)
+    health = 5
 
 
     # Exit function
@@ -37,6 +41,17 @@ def play(Player, Enemy):
     # Main game loop
     clock = pygame.time.Clock()
     running = True
+    
+    def healthCheck(playerHealth):
+        while playerHealth > 0+1:
+            if player.rect.colliderect(enemy.rect):
+                playerHealth -= 1
+                print(playerHealth)
+                sleep(1)
+        
+    t1 = threading.Thread(target=healthCheck, args=(health,))
+    t1.start()
+
     while running:
         # Handle events
         for event in pygame.event.get():

@@ -30,17 +30,17 @@ def create_button(position, size, color, text, text_color,type):
     textsurf = str(text_surf)
 
     if type == "PLAY":
-        charImage = pygame.image.load(os.path.join('game', 'sprites', 'knap.png'))
-        charImage = pygame.transform.scale(charImage, (160, 80))
-        charImage = charImage.convert()
-        button.blit(charImage, button.get_rect())
+        buttonImage = pygame.image.load(os.path.join('game', 'sprites', 'knap.png'))
+        buttonImage = pygame.transform.scale(buttonImage, (160, 80))
+        buttonImage = buttonImage.convert()
+        button.blit(buttonImage, button.get_rect())
 
     elif type == "EXIT":
-        charImage = pygame.image.load(os.path.join('game', 'sprites', 'Exit Knap.png'))
-        #charImage = pygame.transform.scale(charImage, (57, 26))
-        charImage = pygame.transform.scale(charImage, (160, 80))
-        charImage = charImage.convert()
-        button.blit(charImage, button.get_rect())
+        buttonImage = pygame.image.load(os.path.join('game', 'sprites', 'Exit Knap.png'))
+        #buttonImage = pygame.transform.scale(buttonImage, (57, 26))
+        buttonImage = pygame.transform.scale(buttonImage, (160, 80))
+        buttonImage = buttonImage.convert()
+        button.blit(buttonImage, button.get_rect())
 
     button.blit(text_surf, text_rect)
     button_rect = button.get_rect(center=position)
