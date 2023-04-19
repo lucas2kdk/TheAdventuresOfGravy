@@ -3,15 +3,9 @@ import os
 from main import play
 from game.characters.player import Player
 from game.characters.enemy import Enemy
-from threading import Thread
-import playsound
 
 # Initialize Pygame
 pygame.init()
-
-t = Thread(target=playsound.playsound, args=["main theme.mp3"])
-
-t.start()
 
 # Set up the window
 info = pygame.display.Info()

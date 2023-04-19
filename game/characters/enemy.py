@@ -10,11 +10,14 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = 0.8
         self.position = pygame.math.Vector2(screen_size[0] / 2, screen_size[1] / 2)
 
-        # Scale enemy to 4% of screen size
-        scale_factor = int(screen_size[0] * 0.04) / self.rect.width
+        # Create image and scale enemy to 4% of screen size
+        self.image = pygame.Surface((60, 60))
+        self.image.fill((255, 0, 0))
+        scale_factor = int(screen_size[0] * 0.04) / self.image.get_width()
         self.image = pygame.transform.rotozoom(self.image, 0, scale_factor)
-        self.rect = self.image.get_rect()
 
+        # Set rect
+        self.rect = self.image.get_rect()
     def update(self, player_position):
         # Move the enemy towards the player
         direction = player_position - self.position
