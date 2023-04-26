@@ -4,6 +4,9 @@ from game.characters.player import Player
 from game.characters.enemy import Enemy
 from pygame.locals import *
 from game.characters.enemy import *
+from time import sleep
+import threading
+#from sys import exit
 
 # make a main function
 def play(Player, Enemy):
@@ -26,6 +29,7 @@ def play(Player, Enemy):
     player = Player((screen.get_width(), screen.get_height()))
     enemy = Enemy((screen.get_width(), screen.get_height()))
     all_sprites = pygame.sprite.Group(player, enemy)
+    health = 5
 
 
     # Exit function
@@ -37,23 +41,38 @@ def play(Player, Enemy):
     # Main game loop
     clock = pygame.time.Clock()
     running = True
+    
+    def healthCheck(playerHealth):
+        while playerHealth > 0+1:
+            if player.rect.colliderect(enemy.rect):
+                playerHealth -= 1
+                print(playerHealth)
+                sleep(1)
+        
+    t1 = threading.Thread(target=healthCheck, args=(health,))
+    t1.start()
+
     while running:
         # Handle events
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
 
+        # Update the player and enemy
+        keys = pygame.key.get_pressed()
+        player.update(keys)
+        enemy.update(player.position)
+
         # Blit the background image onto the screen
         screen.blit(background_image, (0, 0))
 
         # Draw the sprites
         all_sprites.draw(screen)
-        screen.blit(frame_list[frame], (0, 0))
+        screen.blit(enemy.frame_list[enemy.current_frame], (0, 0))
 
-        # Update the player and enemy
-        keys = pygame.key.get_pressed()
-        player.update(keys)
-        enemy.update(player.position)
+        # Damage the player
+        player_right = player.get_bottom_right
+        print(player_right_bottom)
 
         # Run exitfn function
         exitfn(keys)

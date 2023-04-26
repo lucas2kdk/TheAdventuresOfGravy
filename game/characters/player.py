@@ -19,6 +19,12 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.rotozoom(self.original_image, 0, self.scale_factor)
         self.rect = self.image.get_rect(center=self.position)
 
+        def get_bottom_right(self):
+            d = self._x + self.width
+            t = self._y + self.height
+            player_right_bottom = (d, t)
+            return(player_right_bottom)
+
     def update(self, keys):
         # Handle player movement
         Kx = keys[pygame.K_d] - keys[pygame.K_a]
