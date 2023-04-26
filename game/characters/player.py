@@ -4,7 +4,13 @@ import os
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen_size):
         super().__init__()
-
+        def get_bottom_right(self):
+            # d = self._x + self.width
+            # t = self._y + self.height
+            # player_right_bottom = (d, t)
+            currX = self.rect.x 
+            print('currX:',currX)
+            return(currX)
         # Set player properties
         self.health = 100
         self.speed = 0.02 * screen_size[0]
@@ -18,12 +24,9 @@ class Player(pygame.sprite.Sprite):
         self.scale_factor = int(self.screen_size[0] * 0.1) / self.original_image.get_width()
         self.image = pygame.transform.rotozoom(self.original_image, 0, self.scale_factor)
         self.rect = self.image.get_rect(center=self.position)
+        self.bottomRight = get_bottom_right(self)
 
-        def get_bottom_right(self):
-            d = self._x + self.width
-            t = self._y + self.height
-            player_right_bottom = (d, t)
-            return(player_right_bottom)
+        
 
     def update(self, keys):
         # Handle player movement
@@ -35,3 +38,4 @@ class Player(pygame.sprite.Sprite):
             movement_vector *= self.speed
         self.position += movement_vector
         self.rect.center = self.position
+        

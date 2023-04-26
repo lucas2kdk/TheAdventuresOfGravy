@@ -27,7 +27,7 @@ def play(Player, Enemy):
 
     # Create the player and enemy objects and the sprite group
     player = Player((screen.get_width(), screen.get_height()))
-    enemy = Enemy((screen.get_width(), screen.get_height()))
+    enemy = Enemy((screen.get_width()/2, screen.get_height()/2))
     all_sprites = pygame.sprite.Group(player, enemy)
     health = 5
 
@@ -43,11 +43,17 @@ def play(Player, Enemy):
     running = True
     
     def healthCheck(playerHealth):
-        while playerHealth > 0+1:
+        print("HEALTH",playerHealth)
+        while playerHealth > 0:
             if player.rect.colliderect(enemy.rect):
                 playerHealth -= 1
-                print(playerHealth)
+                print("PLAYERHEALTH:",playerHealth)
                 sleep(1)
+            # else:
+            #     pygame.quit()
+            #     quit()
+        pygame.quit()
+        quit()
         
     t1 = threading.Thread(target=healthCheck, args=(health,))
     t1.start()
@@ -62,6 +68,7 @@ def play(Player, Enemy):
         keys = pygame.key.get_pressed()
         player.update(keys)
         enemy.update(player.position)
+        # print(player.bottomRight)
 
         # Blit the background image onto the screen
         screen.blit(background_image, (0, 0))
@@ -70,9 +77,8 @@ def play(Player, Enemy):
         all_sprites.draw(screen)
         screen.blit(enemy.frame_list[enemy.current_frame], (0, 0))
 
-        # Damage the player
-        player_right = player.get_bottom_right
-        print(player_right_bottom)
+        # Draw helth
+        
 
         # Run exitfn function
         exitfn(keys)
