@@ -6,14 +6,11 @@ from pygame.locals import *
 from game.characters.enemy import *
 from time import sleep
 import threading
-#from sys import exit
 
 # make a main function
 def play(Player, Enemy):
-
     # Initialize Pygame
     pygame.init()
-
     # Set up the window
     info = pygame.display.Info()
     screen = pygame.display.set_mode((info.current_w, info.current_h), pygame.FULLSCREEN)
@@ -29,8 +26,7 @@ def play(Player, Enemy):
     player = Player((screen.get_width(), screen.get_height()))
     enemy = Enemy((screen.get_width()/2, screen.get_height()/2))
     all_sprites = pygame.sprite.Group(player, enemy)
-    health = 5
-
+    
 
     # Exit function
     def exitfn(keys):
@@ -42,20 +38,17 @@ def play(Player, Enemy):
     clock = pygame.time.Clock()
     running = True
     
-    def healthCheck(playerHealth):
-        print("HEALTH",playerHealth)
-        while playerHealth > 0:
+    def healthCheck(currHealth):
+        while currHealth > 0:
             if player.rect.colliderect(enemy.rect):
-                playerHealth -= 1
-                print("PLAYERHEALTH:",playerHealth)
+                currHealth += -1
+                player.currHealth = currHealth
+                print("PLAYERHEALTH:",player.currHealth)
                 sleep(1)
-            # else:
-            #     pygame.quit()
-            #     quit()
         pygame.quit()
         quit()
         
-    t1 = threading.Thread(target=healthCheck, args=(health,))
+    t1 = threading.Thread(target=healthCheck, args=(player.currHealth,))
     t1.start()
 
     while running:
@@ -68,7 +61,6 @@ def play(Player, Enemy):
         keys = pygame.key.get_pressed()
         player.update(keys)
         enemy.update(player.position)
-        # print(player.bottomRight)
 
         # Blit the background image onto the screen
         screen.blit(background_image, (0, 0))
@@ -78,11 +70,12 @@ def play(Player, Enemy):
         screen.blit(enemy.frame_list[enemy.current_frame], (0, 0))
 
         # Draw helth
-        
+        myfont = pygame.font.SysFont("monospace", 15)
+        label = myfont.render("health: " + str(player.currHealth), 10, (255,255,255))
+        screen.blit(label, (100, 20))
 
         # Run exitfn function
         exitfn(keys)
-
 
         # Update the screen
         pygame.display.flip()

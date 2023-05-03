@@ -25,6 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.rotozoom(self.original_image, 0, self.scale_factor)
         self.rect = self.image.get_rect(center=self.position)
         self.bottomRight = get_bottom_right(self)
+        self.currHealth = 5
 
         
 
