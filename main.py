@@ -1,4 +1,5 @@
 import os
+import sys
 import pygame
 from game.characters.player import Player
 from game.characters.enemy import Enemy
@@ -11,7 +12,10 @@ from gameover import game_over_menu
 def play(Player, Enemy):
     # Initialize Pygame
     pygame.init()
-    # Set up the window
+    pygame.mixer.init()
+    pygame.mixer.music.load("game/sounds/Menu theme but actually good.wav")
+    pygame.mixer.music.set_volume(0.3)
+    pygame.mixer.music.play(0,0)
     info = pygame.display.Info()
     screen = pygame.display.set_mode((info.current_w, info.current_h), pygame.FULLSCREEN)
 
@@ -42,15 +46,19 @@ def play(Player, Enemy):
 
     def healthCheck():
         global running
-        while player.currHealth > 0:
+        
+        while player.currHealth > 0:    
             if player.rect.colliderect(enemy.rect):
                 with health_lock:
                     player.currHealth -= 1
                 print("PLAYER HEALTH:", player.currHealth)
             pygame.time.delay(100)  # Delay between health checks
-            if player.currHealth == 0:
-                running = False  # Set running to False when player's health reaches 0
-                game_over_menu()
+            # if player.currHealth == 0:
+            #      running = False  # Set running to False when player's health reaches 0
+            #      game_over_menu()
+        sound = pygame.mixer.Sound("game/sounds/Death.wav")
+        pygame.mixer.Sound.play(sound,1,2000,1500)
+        running = False
 
     t1 = threading.Thread(target=healthCheck)
     t1.start()

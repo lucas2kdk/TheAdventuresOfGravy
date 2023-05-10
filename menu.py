@@ -6,6 +6,10 @@ from game.characters.enemy import Enemy
 
 # Initialize Pygame
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.load("game/sounds/Main_theme.wav")
+pygame.mixer.music.set_volume(0.3)
+pygame.mixer.music.play(0,0)
 
 # Set up the window
 info = pygame.display.Info()
