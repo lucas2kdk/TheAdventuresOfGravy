@@ -4,8 +4,8 @@ from game.characters.player import Player
 from game.characters.enemy import Enemy
 from pygame.locals import *
 from game.characters.enemy import *
-from time import sleep
 import threading
+from gameover import game_over_menu
 
 # make a main function
 def play(Player, Enemy):
@@ -26,7 +26,9 @@ def play(Player, Enemy):
     player = Player((screen.get_width(), screen.get_height()))
     enemy = Enemy((screen.get_width()/2, screen.get_height()/2))
     all_sprites = pygame.sprite.Group(player, enemy)
-    
+
+    # Health lock
+    health_lock = threading.Lock()
 
     # Exit function
     def exitfn(keys):
@@ -37,21 +39,23 @@ def play(Player, Enemy):
     # Main game loop
     clock = pygame.time.Clock()
     running = True
-    
-    def healthCheck(currHealth):
-        while currHealth > 0:
+
+    def healthCheck():
+        global running
+        while player.currHealth > 0:
             if player.rect.colliderect(enemy.rect):
-                currHealth += -1
-                player.currHealth = currHealth
-                print("PLAYERHEALTH:",player.currHealth)
-                sleep(1)
-        pygame.quit()
-        quit()
-        
-    t1 = threading.Thread(target=healthCheck, args=(player.currHealth,))
+                with health_lock:
+                    player.currHealth -= 1
+                print("PLAYER HEALTH:", player.currHealth)
+            pygame.time.delay(100)  # Delay between health checks
+            if player.currHealth == 0:
+                running = False  # Set running to False when player's health reaches 0
+                game_over_menu()
+
+    t1 = threading.Thread(target=healthCheck)
     t1.start()
 
-    while running:
+    while running == True:
         # Handle events
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -69,9 +73,9 @@ def play(Player, Enemy):
         all_sprites.draw(screen)
         screen.blit(enemy.frame_list[enemy.current_frame], (0, 0))
 
-        # Draw helth
+        # Draw health
         myfont = pygame.font.SysFont("monospace", 15)
-        label = myfont.render("health: " + str(player.currHealth), 10, (255,255,255))
+        label = myfont.render("Health: " + str(player.currHealth), 10, (255, 255, 255))
         screen.blit(label, (100, 20))
 
         # Run exitfn function
@@ -82,7 +86,7 @@ def play(Player, Enemy):
 
         # Limit the frame rate to 60 fps
         clock.tick(60)
-        
+
     # Quit Pygame
     pygame.quit()
     quit()
