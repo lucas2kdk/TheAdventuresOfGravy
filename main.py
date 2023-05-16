@@ -53,12 +53,13 @@ def play(Player, Enemy):
                     player.currHealth -= 1
                 print("PLAYER HEALTH:", player.currHealth)
             pygame.time.delay(100)  # Delay between health checks
-            # if player.currHealth == 0:
-            #      running = False  # Set running to False when player's health reaches 0
-            #      game_over_menu()
+
         sound = pygame.mixer.Sound("game/sounds/death.wav")
         pygame.mixer.Sound.play(sound,1,2000,1500)
         running = False
+        pygame.quit()
+        quit()
+
 
     t1 = threading.Thread(target=healthCheck)
     t1.start()
