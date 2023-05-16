@@ -56,7 +56,7 @@ def play(Player, Enemy):
             # if player.currHealth == 0:
             #      running = False  # Set running to False when player's health reaches 0
             #      game_over_menu()
-        sound = pygame.mixer.Sound("game/sounds/Death.wav")
+        sound = pygame.mixer.Sound("game/sounds/death.wav")
         pygame.mixer.Sound.play(sound,1,2000,1500)
         running = False
 
