@@ -3,6 +3,7 @@ import sys
 import math
 import random
 from button import Button
+import json
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -242,9 +243,27 @@ def high_score(score, highscore):
         highscore = score
     return(highScore)
 
+# writes the highscore if it is higer then the current highscore stored in the highscore.json file
+def write_json():
+    if highscore >= json.loads(str(highscore)):
+        with open('highScore.json', 'w') as f:
+            json.dump(str(highscore), f)
+
+# makes a variable to check ig the game is running
+global game
+game = 0
+
+# loads the highscore from the higscore.json file 
+def read_json(game):
+    if game == 1:
+        highscore = json.loads(highscore)
+
 def play():
+    # sets the game variable to 1 to show the game is running for the read_json function
+    game = 1
     global score
     global highscore
+    read_json(game)
     # Clear all ghosts and demons and create new ones
     ghost_group.empty()
     demon_group.empty()
@@ -349,6 +368,7 @@ def play():
         for player in player_group:
             if player.health <= 0:
                 score = 0
+                write_json()
                 return  # Return to main menu if player is dead
 
         pygame.display.flip()
@@ -381,6 +401,7 @@ def main_menu():
                     score = 0  # Reset score when starting a new game
                     play()
                 if QUIT_BUTTON.checkForInput(pygame.mouse.get_pos()):
+                    game = 0
                     pygame.quit()
                     sys.exit()
 
