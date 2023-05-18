@@ -98,11 +98,27 @@ class Bullet(pygame.sprite.Sprite):
 class Ghost(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((100, 100))
-        self.image.fill((255, 0, 0))
+
+        sprite_sheet = pygame.image.load('assets/sprites/ghost.png').convert_alpha()
+        sprite_width, sprite_height = sprite_sheet.get_size()
+        sprite_size = min(sprite_width, sprite_height)
+
+        scaled_size = int(sprite_size * 1.8)  # Scale factor of 1.8
+        self.images = []
+        for i in range(sprite_width // sprite_size):  # iterate over columns
+            image = sprite_sheet.subsurface(pygame.Rect(i * sprite_size, 0, sprite_size, sprite_size))
+            scaled_image = pygame.transform.scale(image, (scaled_size, scaled_size))  # Scale the image
+            self.images.append(scaled_image)
+
+        self.current_image = 0
+        self.image = self.images[self.current_image]
+        self.rect = self.image.get_rect()
+
         self.health = 100
         self.speed = 1
         self.damage = 5
+        self.scaled_size = scaled_size  # Store the scaled size
+
         # Choose a random location outside the screen for the ghost to spawn
         side = random.choice(["top", "bottom", "left", "right"])
         if side == "top":
@@ -117,7 +133,8 @@ class Ghost(pygame.sprite.Sprite):
         else:  # side == "right"
             x = SCREEN_WIDTH
             y = random.randint(0, SCREEN_HEIGHT)
-        self.rect = self.image.get_rect(center=(x, y))
+
+        self.rect.center = (x, y)
 
     def update(self):
         if self.health <= 0:
@@ -134,19 +151,35 @@ class Ghost(pygame.sprite.Sprite):
             elif self.rect.y > player.rect.y:
                 self.rect.y -= self.speed
 
+            # Update the image
+            self.current_image = (self.current_image + 1) % len(self.images)
+            self.image = self.images[self.current_image]
+
     def draw_health_bar(self, surface):
-        pygame.draw.rect(surface, (255, 0, 0), (self.rect.x, self.rect.y - 10, 100, 10))
-        pygame.draw.rect(surface, (0, 255, 0), (self.rect.x, self.rect.y - 10, 100 * (self.health / 100), 10))
+        pygame.draw.rect(surface, (255, 0, 0), (self.rect.x, self.rect.y - 10, self.scaled_size, 10))
+        pygame.draw.rect(surface, (0, 255, 0), (self.rect.x, self.rect.y - 10, self.scaled_size * (self.health / 100), 10))
+
+
+
+
+
+
+
+
 
 
 class Demon(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = pygame.Surface((100, 100))
-        self.image.fill((0, 255, 255))
+
+        # Load the image and set it as the sprite's surface
+        self.image = pygame.image.load('assets/sprites/demon.png').convert_alpha()
+        self.rect = self.image.get_rect()
+
         self.health = 60
         self.speed = 4
         self.damage = 10
+
         # Choose a random location outside the screen for the demon to spawn
         side = random.choice(["top", "bottom", "left", "right"])
         if side == "top":
@@ -161,7 +194,7 @@ class Demon(pygame.sprite.Sprite):
         else:  # side == "right"
             x = SCREEN_WIDTH
             y = random.randint(0, SCREEN_HEIGHT)
-        self.rect = self.image.get_rect(center=(x, y))
+        self.rect.center = (x, y)
 
     def update(self):
         if self.health <= 0:
@@ -200,18 +233,6 @@ class Demon(pygame.sprite.Sprite):
                 self.rect.x += overlap * nx
                 self.rect.y += overlap * ny
 
-        for ghost in ghost_group:
-            if pygame.sprite.collide_rect(self, ghost):
-                dx = self.rect.x - ghost.rect.x
-                dy = self.rect.y - ghost.rect.y
-                distance = math.hypot(dx, dy)
-                if distance == 0:
-                    distance = 1
-                nx = dx / distance
-                ny = dy / distance
-                overlap = (self.rect.width + ghost.rect.width) / 2 - distance
-                self.rect.x += overlap * nx
-                self.rect.y += overlap * ny
 
     def draw_health_bar(self, surface):
         pygame.draw.rect(surface, (255, 0, 0), (self.rect.x, self.rect.y - 10, 100, 10))
