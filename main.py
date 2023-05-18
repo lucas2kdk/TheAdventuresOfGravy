@@ -2,8 +2,8 @@ import pygame
 import sys
 import math
 import random
-from button import Button
 import json
+from button import Button
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -214,6 +214,24 @@ class Demon(pygame.sprite.Sprite):
         pygame.draw.rect(surface, (0, 255, 0), (self.rect.x, self.rect.y - 10, 100 * (self.health / 200), 10))
 
 
+class HighScoreManager:
+    def __init__(self):
+        self.filename = 'highScore.json'
+        self.high_score = self.read_high_score()
+
+    def read_high_score(self):
+        try:
+            with open(self.filename, 'r') as f:
+                return int(json.load(f))
+        except (FileNotFoundError, json.JSONDecodeError):
+            return 0
+
+    def update_high_score(self, current_score):
+        if current_score > self.high_score:
+            self.high_score = current_score
+            with open(self.filename, 'w') as f:
+                json.dump(str(self.high_score), f)
+
 player = Player()
 player_group = pygame.sprite.GroupSingle(player)
 bullet_group = pygame.sprite.Group()
@@ -226,8 +244,8 @@ SPAWN_GHOST = pygame.USEREVENT + 1
 pygame.time.set_timer(SPAWN_GHOST, random.randint(8000, 12000))  # 6-10 seconds
 
 score = 0
-highscore = 0
 score_font = pygame.font.Font("assets/font.ttf", 30)
+high_score_font = pygame.font.Font("assets/font.ttf", 30)
 
 def spawn_ghost():
     ghost = Ghost()
@@ -237,33 +255,10 @@ def spawn_demon():
     demon = Demon()
     demon_group.add(demon)
 
-def high_score(score, highscore):
-    highScore = highscore
-    if score >= highscore:
-        highscore = score
-    return(highScore)
-
-# writes the highscore if it is higer then the current highscore stored in the highscore.json file
-def write_json():
-    if highscore >= json.loads(str(highscore)):
-        with open('highScore.json', 'w') as f:
-            json.dump(str(highscore), f)
-
-# makes a variable to check ig the game is running
-global game
-game = 0
-
-# loads the highscore from the higscore.json file 
-def read_json(game):
-    if game == 1:
-        highscore = json.loads(highscore)
+high_score_manager = HighScoreManager()
 
 def play():
-    # sets the game variable to 1 to show the game is running for the read_json function
-    game = 1
     global score
-    global highscore
-    read_json(game)
     # Clear all ghosts and demons and create new ones
     ghost_group.empty()
     demon_group.empty()
@@ -273,9 +268,8 @@ def play():
     # Reset player's health and position
     player_group.sprite.health = 100
     player_group.sprite.rect.center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
-    
-    spawn_ghost_time = pygame.time.get_ticks()
-    spawn_demon_time = pygame.time.get_ticks()
+
+    spawn_demon_time = pygame.time.get_ticks()  # Add this line to initialize spawn_demon_time
 
     while True:
         SCREEN.blit(PLAY_BACKGROUND, (0, 0))
@@ -283,6 +277,7 @@ def play():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                high_score_manager.update_high_score(score)
                 pygame.quit()
                 sys.exit()
 
@@ -311,7 +306,7 @@ def play():
                 bullet.kill()
                 if ghost.health <= 0:
                     score += 1
-                high_score(score, highscore)
+                    high_score_manager.update_high_score(score)
 
         # Check for bullet collisions with demons
         for bullet in bullet_group:
@@ -321,19 +316,25 @@ def play():
                 bullet.kill()
                 if demon.health <= 0:
                     score += 1
-                high_score(score, highscore)
+                    high_score_manager.update_high_score(score)
 
         # Check for ghost collisions with player
         for player in player_group:
             ghost_touch_list = pygame.sprite.spritecollide(player, ghost_group, False)
             for ghost in ghost_touch_list:
                 player.health -= ghost.damage
+                if player.health <= 0:
+                    high_score_manager.update_high_score(score)
+                    main_menu()
 
         # Check for demon collisions with player
         for player in player_group:
             demon_touch_list = pygame.sprite.spritecollide(player, demon_group, False)
             for demon in demon_touch_list:
                 player.health -= demon.damage
+                if player.health <= 0:
+                    high_score_manager.update_high_score(score)
+                    main_menu()
 
         # Spawn new demon every 12-15 seconds
         if pygame.time.get_ticks() - spawn_demon_time > random.randint(12000, 15000):
@@ -355,24 +356,17 @@ def play():
         for demon in demon_group:
             demon.draw_health_bar(SCREEN)
 
-        if score >= highscore:
-            highscore = score
-
         # Draw score counter in the top left corner
         score_text = score_font.render("Score: " + str(score), True, (255, 255, 255))
         SCREEN.blit(score_text, (10, 10))
-        highScore_text = score_font.render("high score: "+str(highscore), True, (255, 255, 255))
-        SCREEN.blit(highScore_text, (10, 60))
 
-        # Check if player is dead
-        for player in player_group:
-            if player.health <= 0:
-                score = 0
-                write_json()
-                return  # Return to main menu if player is dead
+        high_score_text = high_score_font.render("High Score: " + str(high_score_manager.high_score), True, (255, 255, 255))
+        SCREEN.blit(high_score_text, (10, 50))  # Adjust the position as needed
 
-        pygame.display.flip()
+        pygame.display.update()
         clock.tick(60)
+
+
 
 
 def main_menu():
@@ -394,6 +388,7 @@ def main_menu():
             
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                high_score_manager.update_high_score(score)
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -401,7 +396,7 @@ def main_menu():
                     score = 0  # Reset score when starting a new game
                     play()
                 if QUIT_BUTTON.checkForInput(pygame.mouse.get_pos()):
-                    game = 0
+                    high_score_manager.update_high_score(score)
                     pygame.quit()
                     sys.exit()
 
