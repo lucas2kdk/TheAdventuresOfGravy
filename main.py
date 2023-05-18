@@ -225,6 +225,7 @@ SPAWN_GHOST = pygame.USEREVENT + 1
 pygame.time.set_timer(SPAWN_GHOST, random.randint(8000, 12000))  # 6-10 seconds
 
 score = 0
+highscore = 0
 score_font = pygame.font.Font("assets/font.ttf", 30)
 
 def spawn_ghost():
@@ -235,8 +236,15 @@ def spawn_demon():
     demon = Demon()
     demon_group.add(demon)
 
+def high_score(score, highscore):
+    highScore = highscore
+    if score >= highscore:
+        highscore = score
+    return(highScore)
+
 def play():
     global score
+    global highscore
     # Clear all ghosts and demons and create new ones
     ghost_group.empty()
     demon_group.empty()
@@ -284,6 +292,7 @@ def play():
                 bullet.kill()
                 if ghost.health <= 0:
                     score += 1
+                high_score(score, highscore)
 
         # Check for bullet collisions with demons
         for bullet in bullet_group:
@@ -293,6 +302,7 @@ def play():
                 bullet.kill()
                 if demon.health <= 0:
                     score += 1
+                high_score(score, highscore)
 
         # Check for ghost collisions with player
         for player in player_group:
@@ -326,13 +336,19 @@ def play():
         for demon in demon_group:
             demon.draw_health_bar(SCREEN)
 
+        if score >= highscore:
+            highscore = score
+
         # Draw score counter in the top left corner
         score_text = score_font.render("Score: " + str(score), True, (255, 255, 255))
         SCREEN.blit(score_text, (10, 10))
+        highScore_text = score_font.render("high score: "+str(highscore), True, (255, 255, 255))
+        SCREEN.blit(highScore_text, (10, 60))
 
         # Check if player is dead
         for player in player_group:
             if player.health <= 0:
+                score = 0
                 return  # Return to main menu if player is dead
 
         pygame.display.flip()
