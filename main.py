@@ -20,6 +20,10 @@ PLAY_BACKGROUND = pygame.transform.scale(PLAY_BACKGROUND, (SCREEN_WIDTH, SCREEN_
 
 font = pygame.font.Font("assets/font.ttf", 75)
 
+# Background audio
+pygame.mixer.init()
+pygame.mixer.music.set_volume(0.3)
+
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -269,6 +273,13 @@ def play():
     player_group.sprite.health = 100
     player_group.sprite.rect.center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
 
+    ghost_death_sound = pygame.mixer.Sound("assets/sounds/effects/ghost_scream.mp3")
+    player_death_sound = pygame.mixer.Sound("assets/sounds/effects/clap.wav")
+
+    pygame.mixer.stop()
+    pygame.mixer.music.load("assets/sounds/music/main_theme.wav")
+    pygame.mixer.music.play(0,0)
+
     spawn_demon_time = pygame.time.get_ticks()  # Add this line to initialize spawn_demon_time
 
     while True:
@@ -307,6 +318,7 @@ def play():
                 if ghost.health <= 0:
                     score += 1
                     high_score_manager.update_high_score(score)
+                    ghost_death_sound.play()
 
         # Check for bullet collisions with demons
         for bullet in bullet_group:
@@ -325,6 +337,7 @@ def play():
                 player.health -= ghost.damage
                 if player.health <= 0:
                     high_score_manager.update_high_score(score)
+                    player_death_sound.play()
                     main_menu()
 
         # Check for demon collisions with player
@@ -334,6 +347,7 @@ def play():
                 player.health -= demon.damage
                 if player.health <= 0:
                     high_score_manager.update_high_score(score)
+                    player_death_sound.play()
                     main_menu()
 
         # Spawn new demon every 12-15 seconds
@@ -366,9 +380,6 @@ def play():
         pygame.display.update()
         clock.tick(60)
 
-
-
-
 def main_menu():
     MENU_TEXT = font.render("The Legend of Gravy", True, "#b68f40")
     MENU_RECT = MENU_TEXT.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 5))
@@ -378,7 +389,12 @@ def main_menu():
     QUIT_BUTTON = Button(image=pygame.image.load("assets/menu/Quit_Rect.png"), pos=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 1.5), 
         text_input="QUIT", font=font, base_color="#d7fcd4", hovering_color="White")
 
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load("assets/sounds/music/menu_theme.wav")
+    pygame.mixer.music.play(0,0)
+
     while True:
+
         SCREEN.blit(MAIN_MENU_BACKGROUND, (0, 0))
         SCREEN.blit(MENU_TEXT, MENU_RECT)
 
