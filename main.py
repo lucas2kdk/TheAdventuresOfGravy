@@ -294,8 +294,8 @@ def play():
     player_group.sprite.health = 100
     player_group.sprite.rect.center = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
 
-    ghost_death_sound = pygame.mixer.Sound("assets/sounds/effects/ghost_scream.mp3")
-    player_death_sound = pygame.mixer.Sound("assets/sounds/effects/clap.wav")
+    #ghost_death_sound = pygame.mixer.Sound("assets/sounds/effects/ghost_scream.mp3")
+    #player_death_sound = pygame.mixer.Sound("assets/sounds/effects/clap.wav")
 
     pygame.mixer.stop()
     pygame.mixer.music.load("assets/sounds/music/main_theme.wav")
@@ -339,7 +339,7 @@ def play():
                 if ghost.health <= 0:
                     score += 1
                     high_score_manager.update_high_score(score)
-                    ghost_death_sound.play()
+                    #ghost_death_sound.play()
 
         # Check for bullet collisions with demons
         for bullet in bullet_group:
@@ -358,7 +358,7 @@ def play():
                 player.health -= ghost.damage
                 if player.health <= 0:
                     high_score_manager.update_high_score(score)
-                    player_death_sound.play()
+                    #player_death_sound.play()
                     main_menu()
 
         # Check for demon collisions with player
@@ -368,7 +368,7 @@ def play():
                 player.health -= demon.damage
                 if player.health <= 0:
                     high_score_manager.update_high_score(score)
-                    player_death_sound.play()
+                    #player_death_sound.play()
                     main_menu()
 
         # Spawn new demon every 12-15 seconds
