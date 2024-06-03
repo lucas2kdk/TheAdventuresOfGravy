@@ -1,4 +1,5 @@
 # The Adventures of Gravy
+A fun little attempt at teaching kids, to code and gathering it in GitHub. From the Danish organization Coding Pirates.
 
 Welcome to "The Adventures of Gravy"! This is a fun, action-packed game where you'll take on the role of Gravy, a brave and adventurous hero who must embark on a dangerous journey to save the world from evil forces.
 
